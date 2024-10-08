@@ -5,6 +5,8 @@ import psycopg2
 from datetime import datetime  # Thêm thư viện datetime
 from tkinter import Menu
 
+ root = tk.Tk()
+ 
 class CalendarApp:
     def __init__(self, master):
         self.master = master
@@ -151,6 +153,5 @@ class CalendarApp:
 
 # Tạo cửa sổ chính
 if __name__ == "__main__":
-    root = tk.Tk()
     app = CalendarApp(root)
     root.mainloop()
