@@ -205,7 +205,8 @@ class Sinhvien:
             self.tree.insert("", "end", values=row)
 
     def __del__(self):
-        self.db.close()
+        if hasattr(self, 'db'):
+            self.db.close()
 
 def main_app():
     win = tk.Tk()
