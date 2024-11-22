@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Thêm Sản Phẩm</title>
+</head>
+<body>
+    <!-- Thanh menu -->
+    <div class="menu">
+        <a href="{{ url_for('home') }}">Thêm Sản Phẩm</a>
+        <a href="{{ url_for('product_list') }}">Danh Sách Sản Phẩm</a>
+        <a href="{{ url_for('product_sales') }}">Bán Sản Phẩm</a>
+    </div>
+
+    <!-- Form thêm sản phẩm -->
+    <div class="container">
+        <h1>Thêm Sản Phẩm</h1>
+        <form action="{{ url_for('add_product') }}" method="POST" enctype="multipart/form-data">
+            <!-- Tên sản phẩm -->
+            <label for="name">Tên Sản Phẩm:</label>
+            <input type="text" id="name" name="name" required>
+
+            <!-- Mã sản phẩm -->
+            <label for="code">Mã Sản Phẩm:</label>
+            <input type="text" id="code" name="code" required>
+
+            <!-- Giá sản phẩm -->
+            <label for="price">Giá Sản Phẩm:</label>
+            <input type="number" id="price" name="price" required>
+
+            <!-- Mô tả sản phẩm -->
+            <label for="description">Mô Tả Sản Phẩm:</label>
+            <textarea id="description" name="description" rows="4"></textarea>
+
+            <!-- Tải ảnh lên -->
+            <label for="image">Tải Ảnh Lên:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+
+            <!-- Nút thêm sản phẩm -->
+            <button type="submit">Thêm Sản Phẩm</button>
+        </form>
+    </div>
+
+
+    <!-- Hiển thị thông báo nếu có -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

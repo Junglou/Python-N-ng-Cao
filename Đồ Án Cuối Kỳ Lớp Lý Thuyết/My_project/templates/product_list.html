@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Danh Sách Sản Phẩm</title>
+</head>
+<body>
+    <!-- Menu -->
+    <div class="menu">
+        <a href="{{ url_for('home') }}">Thêm Sản Phẩm</a>
+        <a href="{{ url_for('product_list') }}">Danh Sách Sản Phẩm</a>
+        <a href="{{ url_for('product_sales') }}">Bán Sản Phẩm</a>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <h1>Danh Sách Sản Phẩm</h1>
+
+        <!-- Form Tìm Kiếm -->
+        <form action="{{ url_for('search_product') }}" method="POST" class="search-form">
+            <input type="text" name="query" placeholder="Nhập mã sản phẩm" required>
+            <button type="submit" class="btn btn-success">Tìm kiếm</button>
+        </form>        
+
+        <!-- Danh sách sản phẩm -->
+        <ul class="product-list">
+            {% for product in products %}
+                <li class="product-item">
+                    <img src="{{ url_for('static', filename=product['image_path']) }}" alt="{{ product['name'] }}" width="100">
+                    <div class="product-info">
+                        <strong>{{ product['name'] }}</strong><br>
+                        <span>Mã: {{ product['code'] }} | Giá: {{ product['price'] }} VND</span><br>
+                        <span>Mô tả: {{ product['description'] }}</span><br>
+                    </div>
+
+                    <!-- Nút hành động -->
+                    <div class="product-actions">
+                        <!-- Nút chỉnh sửa -->
+                        <button class="btn-edit" onclick="openEditForm({{ product['id'] }})">Chỉnh sửa</button>
+
+                        <!-- Nút đăng sản phẩm -->
+                        <a href="{{ url_for('post_product', product_id=product['id']) }}">
+                            <button class="btn-post">Đăng</button>
+                        </a>
+
+                        <!-- Nút xóa -->
+                        <a href="{{ url_for('delete_product', product_id=product['id']) }}">
+                            <button class="btn-delete">Xóa</button>
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Form Chỉnh Sửa -->
+    <div id="editForm" class="modal" style="display:none;">
+        <form method="POST" enctype="multipart/form-data" action="">
+            <h2>Chỉnh Sửa Sản Phẩm</h2>
+            <label for="name">Tên sản phẩm:</label>
+            <input type="text" name="name" id="name" required><br>
+
+            <label for="code">Mã:</label>
+            <input type="text" name="code" id="code" required><br>
+
+            <label for="price">Giá:</label>
+            <input type="text" name="price" id="price" required><br>
+
+            <label for="description">Mô tả:</label>
+            <textarea name="description" id="description"></textarea><br>
+
+            <label for="image">Ảnh:</label>
+            <input type="file" name="image" id="image"><br>
+
+            <button type="submit" class="btn-submit">Cập nhật</button>
+            <button type="button" class="btn-close" onclick="closeEditForm()">Đóng</button>
+        </form>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay" style="display:none;" onclick="closeEditForm()"></div>
+
+    <!-- JavaScript -->
+    <script>
+        const products = {{ products | tojson | safe }};
+
+        function openEditForm(productId) {
+            const product = products.find(p => p.id === productId);
+
+            if (!product) {
+                alert('Không tìm thấy sản phẩm!');
+                return;
+            }
+
+            // Điền thông tin vào form
+            document.getElementById('name').value = product.name;
+            document.getElementById('code').value = product.code;
+            document.getElementById('price').value = product.price;
+            document.getElementById('description').value = product.description;
+
+            // Cập nhật action của form
+            document.querySelector('#editForm form').action = `{{ url_for('edit_product', product_id=0) }}`.replace('0', productId);
+
+            // Hiển thị form và overlay
+            document.getElementById('editForm').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closeEditForm() {
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

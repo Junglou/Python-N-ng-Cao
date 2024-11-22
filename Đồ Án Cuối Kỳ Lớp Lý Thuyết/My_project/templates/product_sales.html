@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Bán Sản Phẩm</title>
+</head>
+<body>
+    <div class="menu">
+        <a href="{{ url_for('home') }}">Thêm Sản Phẩm</a>
+        <a href="{{ url_for('product_list') }}">Danh Sách Sản Phẩm</a>
+        <a href="{{ url_for('product_sales') }}">Bán Sản Phẩm</a>
+    </div>
+
+    <div class="container">
+        <h1>Sản Phẩm Đã Được Đăng</h1>
+        <ul>
+            {% for product in products %}
+                <li>
+                    <img src="{{ url_for('static', filename=product['image_path']) }}" alt="{{ product['name'] }}" width="100">
+                    <div>
+                        <strong>{{ product['name'] }}</strong><br>
+                        <span>Mã: {{ product['code'] }} | Giá: {{ product['price'] }}</span><br>
+                        <span>Mô tả: {{ product['description'] }}</span><br>
+                    </div>
+                    <button onclick="alert('Mua thành công!')">Mua</button>
+                </li>
+            {% else %}
+                <li>Không có sản phẩm nào đã được đăng.</li>
+            {% endfor %}
+        </ul>
+        
+    </div>
+    
+</body>
+</html>
+
